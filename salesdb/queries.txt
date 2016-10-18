@@ -1,0 +1,50 @@
+1.
+    CREATE VIEW holidayOverallSales AS 
+    SELECT salesnew.Store, sum(salesNew.WeeklySales) AS OverallSales
+    FROM salesnew INNER JOIN holidays ON holidays.WeekDate = salesnew.WeekDate WHERE holidays.isHoliday == "TRUE"
+    GROUP BY store;
+
+    SELECT * FROM holidayOverallSales 
+        WHERE OverallSales == (SELECT min(OverallSales) FROM holidayOverallSales) 
+            OR 
+                OverallSales == (SELECT max(OverallSales) 
+        FROM holidayOverallSales);
+
+2. CREATE VIEW salesPerStore AS
+   SELECT salesnew.Dept, (sum(salesnew.WeeklySales) / stores.size) AS normalizedSales FROM
+   salesnew INNER JOIN stores ON salesnew.Store = stores.Store GROUP BY Dept;
+
+   SELECT * FROM salesPerStore order BY normalizedSales DESC LIMIT 20;
+
+3.
+   SELECT Distinct D.Store FROM 
+       ((SELECT DISTINCT A.Store FROM 
+           ((SELECT DISTINCT Store 
+                 FROM 
+                     temporaldata WHERE fuelprice <= 4) 
+                         AS A 
+           LEFT JOIN 
+               (SELECT DISTINCT Store FROM temporaldata WHERE fuelprice > 4 ) 
+                   AS B 
+           ON 
+               A.Store = B.Store) 
+           WHERE B.Store IS NULL) 
+        AS C 
+           INNER JOIN 
+               (SELECT DISTINCT Store FROM temporaldata WHERE unemploymentrate > 10) 
+                    AS D 
+                        ON C.Store = D.Store);
+
+4. CREATE VIEW overallHolidaySales AS
+    SELECT salesNew.WeekDate, sum(salesNew.WeeklySales) AS avgSales
+    FROM salesnew INNER JOIN holidays ON holidays.WeekDate = salesnew.WeekDate WHERE holidays.isHoliday = "TRUE" GROUP BY salesnew.WeekDate; 
+
+    CREATE VIEW overallNonHolidaySales AS
+    SELECT salesNew.WeekDate, sum(salesNew.WeeklySales) AS avgSales
+    FROM salesnew INNER JOIN holidays ON holidays.WeekDate = salesnew.WeekDate WHERE holidays.isHoliday = "FALSE" GROUP BY salesnew.WeekDate;
+
+    SELECT count(*) AS numWeeks FROM (SELECT * FROM overallNonHolidaySales WHERE overallNonHolidaySales.avgSales > (SELECT avg(avgSales) FROM overallHolidaySales));
+
+5. CREATE VIEW salesPerMonth AS SELECT Stores.type, substr(salesnew.weekdate, 0, 8), salesnew.weeklysales FROM salesnew INNER JOIN stores ON salesnew.store = stores.store;
+
+   SELECT type, month, sum(weeklysales) AS overallsales FROM salesPerMonth GROUP BY type, month;
