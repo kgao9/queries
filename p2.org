@@ -1,0 +1,16 @@
+#+TODO: TODO(t) UNDER_REVIEW(r) / DONE(d)
+* TODO Part A
+** TODO A1
+** TODO A2
+** TODO A3
+** TODO A4
+** TODO A5
+** TODO A6
+** TODO A7
+* TODO Part B
+** TODO B1
+** UNDER_REVIEW B2
+** TODO B3
+** TODO B4
+** TODO B5
+** TODO B6
