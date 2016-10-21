@@ -1,0 +1,7 @@
+CREATE VIEW directors_actors AS SELECT directors.id did, actor.id pid, actor.fname, actor.lname FROM actor, directors WHERE actor.fname != '' AND actor.lname != '' AND directors.fname = actor.fname ANd directors.lname = actor.lname;
+
+CREATE VIEW movies_2000 AS SELECT * FROM movie WHERE year = 2000;
+
+CREATE VIEW directors_2000 AS SELECT movie_directors.did FROM movies_2000, movie_directors WHERE movies_2000.id = movie_directors.mid;
+
+SELECT directors_actors.fname, directors_actors.lname FROM directors_2000 INNER JOIN directors_actors ON directors_actors.did = directors_2000.did;
