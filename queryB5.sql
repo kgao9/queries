@@ -44,7 +44,7 @@ CREATE VIEW y1 AS
 SELECT year, count(id) count FROM movie GROUP BY year;
 
 CREATE TABLE decade AS
-SELECT y1.year year, y1.count + IFNULL(y2.count,0) + IFNULL(y3.count,0) + IFNULL(y4.count,0) + IFNULL(y5.count,0) + IFNULL(y6.count,0) + IFNULL(y7.count,0) + IFNULL(y8.count,0) + IFNULL(y9.count,0) decadeCount
+SELECT y1.year year, y1.count + IFNULL(y2.count,0) + IFNULL(y3.count,0) + IFNULL(y4.count,0) + IFNULL(y5.count,0) + IFNULL(y6.count,0) + IFNULL(y7.count,0) + IFNULL(y8.count,0) + IFNULL(y9.count,0) + IFNULL(y10.count,0) decadeCount
 FROM y1 y1
 LEFT OUTER JOIN y1 y2 ON y1.year + 1 = y2.year
 LEFT OUTER JOIN y1 y3 ON y1.year + 2 = y3.year
@@ -53,7 +53,8 @@ LEFT OUTER JOIN y1 y5 ON y1.year + 4 = y5.year
 LEFT OUTER JOIN y1 y6 ON y1.year + 5 = y6.year
 LEFT OUTER JOIN y1 y7 ON y1.year + 6 = y7.year
 LEFT OUTER JOIN y1 y8 ON y1.year + 7 = y8.year
-LEFT OUTER JOIN y1 y9 ON y1.year + 8 = y9.year;
+LEFT OUTER JOIN y1 y9 ON y1.year + 8 = y9.year
+LEFT OUTER JOIN y1 y10 ON y1.year + 9 = y10.year;
 
 SELECT year
 FROM decade
