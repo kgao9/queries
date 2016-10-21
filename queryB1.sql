@@ -40,6 +40,16 @@ CREATE TABLE movie_directors(
   mid int REFERENCES movie);
 */
 
-SELECT fname, lname
-FROM actor NATURAL JOIN (SELECT pid id, count(mid) count FROM (SELECT DISTINCT pid, mid FROM casts) NATURAL JOIN (SELECT id mid FROM movie WHERE year=2010) GROUP BY pid) WHERE count >= 10
-ORDER BY id ASC;
+CREATE VIEW tenMovies AS
+SELECT a.id as actorID, a.fname as actorFname, a.lname as actorlname, count(distinct movie.id) as numMovies
+FROM actor a
+Inner Join casts  
+on a.id = casts.pid
+Inner Join movie 
+on movie.id = casts.mid
+WHERE movie.year = '2010' 
+GROUP BY actorID
+Having numMovies >= 10
+
+SELECT DISTINCT t.actorFname, t.actorlname 
+FROM tenMovies t;
