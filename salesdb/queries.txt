@@ -10,12 +10,12 @@
                 OverallSales == (SELECT max(OverallSales) 
         FROM holidayOverallSales);
 
-2. CREATE VIEW salesPerStore AS
-   SELECT salesnew.Dept, (sum(salesnew.WeeklySales) / stores.size) AS normalizedSales FROM
-   salesnew INNER JOIN stores ON salesnew.Store = stores.Store GROUP BY Dept;
+2. 
+   CREATE VIEW normalizedSales AS 
+   SELECT salesnew.Dept, salesnew.Store, (salesnew.WeeklySales/stores.size) AS normalizedSales FROM  
+   salesnew INNER JOIN stores ON salesnew.Store = stores.Store;
 
-   SELECT * FROM salesPerStore order BY normalizedSales DESC LIMIT 20;
-
+   SELECT dept, sum(normalizedSales) AS allSales FROM normalizedSales GROUP BY dept ORDER BY allSales DESC LIMIT 20;
 3.
    SELECT Distinct D.Store FROM 
        ((SELECT DISTINCT A.Store FROM 
@@ -45,6 +45,9 @@
 
     SELECT count(*) AS numWeeks FROM (SELECT * FROM overallNonHolidaySales WHERE overallNonHolidaySales.avgSales > (SELECT avg(avgSales) FROM overallHolidaySales));
 
-5. CREATE VIEW salesPerMonth AS SELECT Stores.type, substr(salesnew.weekdate, 0, 8), salesnew.weeklysales FROM salesnew INNER JOIN stores ON salesnew.store = stores.store;
+5. CREATE VIEW salesPerMonth AS 
+   SELECT Stores.type, substr(salesnew.weekdate, 6, 2) AS month, salesnew.weeklysales 
+   FROM salesnew INNER JOIN stores ON salesnew.store = stores.store;
+
 
    SELECT type, month, sum(weeklysales) AS overallsales FROM salesPerMonth GROUP BY type, month;
